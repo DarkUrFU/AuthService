@@ -4,6 +4,8 @@ build/
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
+!**/src/main/java/com/darkurfu/authservice/consts/PrivateConst.java
+!**/src/main/resources/application.properties
 
 ### STS ###
 .apt_generated
