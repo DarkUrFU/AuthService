@@ -1,18 +1,12 @@
 package com.darkurfu.authservice.jwt;
 
 
-import com.darkurfu.authservice.service.JWTUtil;
+import com.darkurfu.authservice.service.cryptutils.JWTUtil;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.security.SignatureException;
-import org.aspectj.lang.annotation.Before;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.security.PrivateKey;
-import java.security.Signature;
 
 
 public class JWTUtilTest {

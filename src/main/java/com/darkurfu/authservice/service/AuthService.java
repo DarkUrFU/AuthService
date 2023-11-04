@@ -13,13 +13,5 @@ import java.util.Base64;
 @Service
 public class AuthService {
 
-    public String generateHash(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        KeySpec spec = new PBEKeySpec(user.getPassword().toCharArray(), user.getSalt(), 65536, 128);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 
-        byte[] hash = factory.generateSecret(spec).getEncoded();
-        Base64.Encoder enc = Base64.getEncoder();
-
-        return enc.encodeToString(hash);
-    }
 }

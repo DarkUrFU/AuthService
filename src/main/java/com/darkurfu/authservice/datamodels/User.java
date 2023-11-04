@@ -33,8 +33,8 @@ public class User {
 
 
     public byte[] getSalt(){
-        byte[] b = login.getBytes();
-        b = Arrays.copyOfRange(b, 0, 16);
+        byte[] b = (login + password).getBytes();
+        //b = Arrays.copyOfRange(b, 0, 16);
         return b;
     }
 
