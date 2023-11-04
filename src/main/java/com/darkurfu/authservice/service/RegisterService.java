@@ -1,6 +1,6 @@
 package com.darkurfu.authservice.service;
 
-import com.darkurfu.authservice.datamodels.User;
+import com.darkurfu.authservice.datamodels.user.User;
 import com.darkurfu.authservice.service.cryptutils.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

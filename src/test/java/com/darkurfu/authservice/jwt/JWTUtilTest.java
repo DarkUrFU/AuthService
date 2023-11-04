@@ -22,7 +22,7 @@ public class JWTUtilTest {
 
     @BeforeAll
     static void generateData(){
-        generatedJWT = jwtUtil.generateJWT("admin","1");
+        generatedJWT = jwtUtil.generateAccessJWT("admin",1l,1l);
 
         System.out.println(generatedJWT);
     }

@@ -1,4 +1,4 @@
-package com.darkurfu.authservice.datamodels;
+package com.darkurfu.authservice.datamodels.user;
 
 
 import jakarta.persistence.Entity;
@@ -32,10 +32,8 @@ public class User {
     }
 
 
-    public byte[] getSalt(){
-        byte[] b = (login + password).getBytes();
-        //b = Arrays.copyOfRange(b, 0, 16);
-        return b;
+    public String getSalt(){
+        return login + password;
     }
 
 }

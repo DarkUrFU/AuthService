@@ -1,7 +1,7 @@
 package com.darkurfu.authservice.service.cryptutils;
 
 import com.darkurfu.authservice.consts.PrivateConst;
-import com.darkurfu.authservice.datamodels.PairRtJwt;
+import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.time.*;
 import java.util.Date;
-import java.util.UUID;
 
 
 @Component()
@@ -24,46 +23,71 @@ public class JWTUtil {
         );
     }
 
-    private  SecretKey getSigningKey(String key) {
+    private SecretKey getSigningKey(String key) {
         byte[] keyBytes = Decoders.BASE64.decode(key);
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public PairRtJwt generatePair(String role, String id){
-        String jwt = generateJWT(role, id);
-        String rt = UUID.randomUUID().toString();
+    public PairRtJwt generatePair(String role, long userId, long sessionId){
+        String rt = generateRefreshJWT(userId, sessionId);
+        String jwt = generateAccessJWT(role, userId, sessionId);
 
         return new PairRtJwt(rt,jwt);
     }
 
-    public  String generateJWT(String role, String id){
+    public  String generateAccessJWT(String role, long userId, long sessionId){
+        String jwt;
+
+        LocalDateTime date = LocalDateTime.now(ZoneId.of("Asia/Yekaterinburg"));
+
+        jwt = Jwts.builder()
+                .header()
+                .type("AccessJWT")
+                .add("alg", secretKey.getAlgorithm())
+
+                .and()
+                .claim("role", role) // moder, user or smth else
+
+                .claim("sessionId", userId)
+                .claim("sessionId", sessionId)
+
+                .issuedAt(
+                        Date.from(date.atZone(ZoneId.of("Asia/Yekaterinburg")).toInstant())) //date of generate token
+                .expiration(
+                        Date.from(date.plusHours(2).atZone(ZoneId.of("Asia/Yekaterinburg")).toInstant())) // date of end token
+
+
+                .signWith(secretKey) //set secret key
+                .compact();
+
+        return jwt;
+    }
+
+    public  String generateRefreshJWT(long userId, long sessionId){
         String jwt;
 
         LocalDate date = LocalDate.now(ZoneId.of("Asia/Yekaterinburg"));
 
         jwt = Jwts.builder()
                 .header()
-                .type("JWS")
+                .type("RefreshJWT")
                 .add("alg", secretKey.getAlgorithm())
 
                 .and()
-                .claim("role", role) // moder, user or smth else
+                .claim("sessionId", userId)
+                .claim("sessionId", sessionId)
 
                 .issuedAt(
                         Date.from(date.atStartOfDay(ZoneId.of("Asia/Yekaterinburg")).toInstant())) //date of generate token
                 .expiration(
-                        Date.from(date.plusDays(1).atStartOfDay(ZoneId.of("Asia/Yekaterinburg")).toInstant())) // date of end token
+                        Date.from(date.plusDays(7).atStartOfDay(ZoneId.of("Asia/Yekaterinburg")).toInstant())) // date of end token
 
-                .id(id)
 
                 .signWith(secretKey) //set secret key
                 .compact();
 
-
-
         return jwt;
     }
-
 
     public Jws<Claims> encryptJWT(String jwt) throws SignatureException {
         Jws<Claims> a = null;

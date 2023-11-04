@@ -1,13 +1,11 @@
 package com.darkurfu.authservice.controller;
 
-import com.darkurfu.authservice.datamodels.User;
+import com.darkurfu.authservice.datamodels.user.User;
 import com.darkurfu.authservice.service.RegisterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.logging.Logger;
 
 @RestController
 @RequestMapping("/edit")

@@ -12,20 +12,16 @@ import java.util.Base64;
 @Component
 public class HashUtil {
 
-    public String generateHashWithSalt(String str, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        KeySpec spec = new PBEKeySpec(str.toCharArray(), salt, 65536, 128);
-        SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
-
-        byte[] hash = factory.generateSecret(spec).getEncoded();
-        Base64.Encoder enc = Base64.getEncoder();
-
-        return enc.encodeToString(hash);
+    public String generateHashWithSalt(String str, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return getHash(str, getSalt(salt));
     }
 
     public String generateHash(String str) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        return getHash(str, getSalt(str));
+    }
 
-
-        KeySpec spec = new PBEKeySpec(str.toCharArray(), getSalt(str), 65536, 128);
+    private String getHash(String str, byte[] salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        KeySpec spec = new PBEKeySpec(str.toCharArray(), salt, 65536, 128);
         SecretKeyFactory factory = SecretKeyFactory.getInstance("PBKDF2WithHmacSHA1");
 
         byte[] hash = factory.generateSecret(spec).getEncoded();

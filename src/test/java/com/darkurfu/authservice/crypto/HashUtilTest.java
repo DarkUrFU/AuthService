@@ -1,7 +1,7 @@
 package com.darkurfu.authservice.crypto;
 
 
-import com.darkurfu.authservice.datamodels.User;
+import com.darkurfu.authservice.datamodels.user.User;
 import com.darkurfu.authservice.service.cryptutils.HashUtil;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Nested;

@@ -1,4 +1,4 @@
-package com.darkurfu.authservice.datamodels;
+package com.darkurfu.authservice.datamodels.session;
 
 import lombok.Getter;
 import lombok.NonNull;
