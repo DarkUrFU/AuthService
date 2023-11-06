@@ -18,27 +18,7 @@ public class EditController {
         this.registerService = registerService;
     }
 
-    /**
-     * Регистрация новых пользователей
-     *
-     * @return JWT
-     */
-    @PostMapping()
-    ResponseEntity<String> registerUser(
-            @RequestBody User user
-            ){
-        ResponseEntity<String> response;
 
-        try {
-            String a = registerService.register(user);
-            response = new ResponseEntity<>(a, HttpStatusCode.valueOf(200));
-
-        } catch (Exception e){
-            response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
-        }
-
-        return response;
-    }
 
     /**
      * Изменение пароля

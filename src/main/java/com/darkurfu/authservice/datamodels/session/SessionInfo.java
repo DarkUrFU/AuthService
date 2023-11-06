@@ -7,7 +7,8 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-@Entity(name = "session")
+@Entity
+@Table(name = "session")
 @SecondaryTable(name = "session_login_info", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
 public class SessionInfo {
 
@@ -17,8 +18,8 @@ public class SessionInfo {
 
     @Column(name = "user_id")
     private Long userId;
-
     private String rt;
+    private short statusCode;
 
 
     private String ip;

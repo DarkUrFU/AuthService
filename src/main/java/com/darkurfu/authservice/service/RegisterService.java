@@ -1,6 +1,7 @@
 package com.darkurfu.authservice.service;
 
 import com.darkurfu.authservice.datamodels.user.User;
+import com.darkurfu.authservice.repository.UserRepository;
 import com.darkurfu.authservice.service.cryptutils.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,21 +13,22 @@ import java.security.spec.InvalidKeySpecException;
 @Service
 public class RegisterService {
 
+    private final UserRepository userRepository;
     private final HashUtil hashUtil;
-    private final JWTService jwtService;
 
     @Autowired
-    public RegisterService(HashUtil hashUtil, JWTService jwtService){
+    public RegisterService(HashUtil hashUtil, UserRepository userRepository){
         this.hashUtil = hashUtil;
-        this.jwtService = jwtService;
+        this.userRepository = userRepository;
     }
 
     @Transactional
-    public String register(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    public void register(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
 
         user.setPassword(hashUtil.generateHashWithSalt(user.getPassword(), user.getSalt()));
 
-        return "";
+        userRepository.save(user);
+
     }
 
 

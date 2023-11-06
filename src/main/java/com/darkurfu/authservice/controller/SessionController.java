@@ -9,13 +9,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/jwt")
-public class JWTController {
+@RequestMapping("/session")
+public class SessionController {
 
     private JWTService jwtService;
 
     @Autowired
-    public JWTController(JWTService jwtService){
+    public SessionController(JWTService jwtService){
         this.jwtService = jwtService;
     }
 
