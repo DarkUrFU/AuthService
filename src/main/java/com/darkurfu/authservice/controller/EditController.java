@@ -1,7 +1,6 @@
 package com.darkurfu.authservice.controller;
 
-import com.darkurfu.authservice.datamodels.user.User;
-import com.darkurfu.authservice.service.RegisterService;
+import com.darkurfu.authservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -11,11 +10,11 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/edit")
 public class EditController {
 
-    private RegisterService registerService;
+    private UserService userService;
 
     @Autowired
-    public EditController(RegisterService registerService){
-        this.registerService = registerService;
+    public EditController(UserService userService){
+        this.userService = userService;
     }
 
 

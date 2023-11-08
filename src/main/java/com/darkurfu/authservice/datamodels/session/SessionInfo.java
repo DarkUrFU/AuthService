@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.sql.Timestamp;
+import java.util.UUID;
 
 @Data
 @Entity
@@ -13,8 +14,7 @@ import java.sql.Timestamp;
 public class SessionInfo {
 
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
 
     @Column(name = "user_id")
     private Long userId;
@@ -22,9 +22,16 @@ public class SessionInfo {
     private short statusCode;
 
 
+    @Column(table = "session_login_info")
     private String ip;
+
+    @Column(table = "session_login_info")
     private String device;
 
-    @Column(name = "last_active_time")
+    @Column(name = "last_active_time", table = "session_login_info")
     private Timestamp lastActiveTime;
+
+    public SessionInfo(){}
+
+
 }

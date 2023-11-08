@@ -1,6 +1,6 @@
 package com.darkurfu.authservice.controller;
 
-import com.darkurfu.authservice.service.JWTService;
+import com.darkurfu.authservice.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -12,11 +12,11 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/session")
 public class SessionController {
 
-    private JWTService jwtService;
+    private SessionService sessionService;
 
     @Autowired
-    public SessionController(JWTService jwtService){
-        this.jwtService = jwtService;
+    public SessionController(SessionService sessionService){
+        this.sessionService = sessionService;
     }
 
 

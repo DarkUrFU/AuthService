@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 import lombok.Data;
 
 @Data
-@Entity(name = "\"user\"") //TODO переименовать таблицу из-за конфликта с постгресс (зарезервированное имя)
+@Entity(name = "users")
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)

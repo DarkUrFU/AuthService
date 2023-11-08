@@ -28,14 +28,14 @@ public class JWTUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public PairRtJwt generatePair(String role, long userId, long sessionId){
+    public PairRtJwt generatePair(String role, long userId, String sessionId){
         String rt = generateRefreshJWT(userId, sessionId);
         String jwt = generateAccessJWT(role, userId, sessionId);
 
         return new PairRtJwt(rt,jwt);
     }
 
-    public  String generateAccessJWT(String role, long userId, long sessionId){
+    public  String generateAccessJWT(String role, long userId, String sessionId){
         String jwt;
 
         LocalDateTime date = LocalDateTime.now(ZoneId.of("Asia/Yekaterinburg"));
@@ -48,7 +48,7 @@ public class JWTUtil {
                 .and()
                 .claim("role", role) // moder, user or smth else
 
-                .claim("sessionId", userId)
+                .claim("userId", userId)
                 .claim("sessionId", sessionId)
 
                 .issuedAt(
@@ -63,7 +63,7 @@ public class JWTUtil {
         return jwt;
     }
 
-    public  String generateRefreshJWT(long userId, long sessionId){
+    public  String generateRefreshJWT(long userId, String sessionId){
         String jwt;
 
         LocalDate date = LocalDate.now(ZoneId.of("Asia/Yekaterinburg"));
@@ -74,7 +74,7 @@ public class JWTUtil {
                 .add("alg", secretKey.getAlgorithm())
 
                 .and()
-                .claim("sessionId", userId)
+                .claim("userId", userId)
                 .claim("sessionId", sessionId)
 
                 .issuedAt(

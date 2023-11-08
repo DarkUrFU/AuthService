@@ -6,32 +6,35 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 @Entity(name = "session")
 public class Session {
 
     @Id
-    private Long id;
+    private UUID id;
 
     @Column(name = "user_id")
     private Long userId;
 
     private String rt;
 
+    @Column(name = "status")
     private short statusCode;
 
 
     protected Session(){}
 
-    public Session(long id, long userId, String rt, short statusCode){
-        this.id = id;
+    public Session(String id, long userId, String rt, short statusCode){
+        this.id = UUID.fromString(id);
         this.userId = userId;
         this.rt = rt;
         this.statusCode = statusCode;
     }
 
-    public Session(long id, long userId, String rt, SessionStatus statusCode){
-        this.id = id;
+    public Session(String id, long userId, String rt, SessionStatus statusCode){
+        this.id = UUID.fromString(id);
         this.userId = userId;
         this.rt = rt;
         this.statusCode = statusCode.getCode();
