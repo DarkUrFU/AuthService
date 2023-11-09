@@ -18,25 +18,21 @@ public class Session {
     @Column(name = "user_id")
     private Long userId;
 
-    private String rt;
-
     @Column(name = "status")
     private short statusCode;
 
 
     protected Session(){}
 
-    public Session(String id, long userId, String rt, short statusCode){
+    public Session(String id, long userId, short statusCode){
         this.id = UUID.fromString(id);
         this.userId = userId;
-        this.rt = rt;
         this.statusCode = statusCode;
     }
 
-    public Session(String id, long userId, String rt, SessionStatus statusCode){
+    public Session(String id, long userId, SessionStatus statusCode){
         this.id = UUID.fromString(id);
         this.userId = userId;
-        this.rt = rt;
         this.statusCode = statusCode.getCode();
     }
 }

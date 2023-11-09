@@ -2,14 +2,12 @@ package com.darkurfu.authservice.datamodels.user;
 
 
 import com.darkurfu.authservice.datamodels.enums.UserType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 @Data
 @Entity(name = "users")
+@SecondaryTable(name = "salt", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
 public class User {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -17,6 +15,9 @@ public class User {
     private String login;
     private String password;
     private short type;
+
+    @Column(table = "salt")
+    private String salt;
 
     protected User(){}
 
@@ -31,11 +32,6 @@ public class User {
         this.login = login;
         this.password = password;
         this.type = UserType.USER.getCode();
-    }
-
-
-    public String getSalt(){
-        return login + password;
     }
 
 }

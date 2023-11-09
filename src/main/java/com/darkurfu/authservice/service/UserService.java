@@ -6,7 +6,6 @@ import com.darkurfu.authservice.repository.user.UserRepository;
 import com.darkurfu.authservice.service.cryptutils.HashUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
@@ -24,8 +23,9 @@ public class UserService {
     }
 
     public void register(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        user.setSalt(hashUtil.generateSaltAsString());
 
-        user.setPassword(hashUtil.generateHashWithSalt(user.getPassword(), user.getSalt()));
+        user.setPassword(hashUtil.generateHash(user.getPassword(), user.getSalt()));
 
         userRepository.save(user);
 
@@ -33,7 +33,7 @@ public class UserService {
 
     public User login(User user) throws NoSuchAlgorithmException, InvalidKeySpecException, BadPasswordOrLogin {
         User usr = userRepository.findByLogin(user.getLogin());
-        user.setPassword(hashUtil.generateHashWithSalt(user.getPassword(), user.getSalt()));
+        user.setPassword(hashUtil.generateHash(user.getPassword(), usr.getSalt()));
 
         if (usr.getPassword().equals(user.getPassword())){
             return usr;

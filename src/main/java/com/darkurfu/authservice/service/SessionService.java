@@ -47,7 +47,7 @@ public class SessionService {
         LocalDateTime date = LocalDateTime.now(ZoneId.of("Asia/Yekaterinburg"));
         PairRtJwt pairRtJwt = jwtUtil.generatePair(String.valueOf(user.getType()), user.getId(), uuid.toString());
 
-        sessionRepository.save(new Session(uuid.toString(), user.getId(), hashUtil.generateHash(pairRtJwt.rt()), SessionStatus.ACTIVE.getCode()));
+        sessionRepository.save(new Session(uuid.toString(), user.getId(), SessionStatus.ACTIVE.getCode()));
 
         sessionLoginInfo.setId(uuid);
         sessionLoginInfo.setLastActiveTime(Timestamp.from(date.atZone(ZoneId.of("Asia/Yekaterinburg")).toInstant()));
