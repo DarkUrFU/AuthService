@@ -23,9 +23,11 @@ public class UserService {
     }
 
     public void register(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        user.setSalt(hashUtil.generateSaltAsString());
+        String salt = hashUtil.generateSaltAsString();
 
-        user.setPassword(hashUtil.generateHash(user.getPassword(), user.getSalt()));
+        user.setSalt(salt);
+
+        user.setPassword(hashUtil.generateHash(user.getPassword(), salt));
 
         userRepository.save(user);
 
@@ -33,9 +35,9 @@ public class UserService {
 
     public User login(User user) throws NoSuchAlgorithmException, InvalidKeySpecException, BadPasswordOrLogin {
         User usr = userRepository.findByLogin(user.getLogin());
-        user.setPassword(hashUtil.generateHash(user.getPassword(), usr.getSalt()));
+        String passwd = hashUtil.generateHash(user.getPassword(), usr.getSalt());
 
-        if (usr.getPassword().equals(user.getPassword())){
+        if (usr.getPassword().equals(passwd)){
             return usr;
         } else {
             throw new BadPasswordOrLogin();

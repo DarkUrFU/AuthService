@@ -24,8 +24,8 @@ public class Session {
 
     protected Session(){}
 
-    public Session(String id, long userId, short statusCode){
-        this.id = UUID.fromString(id);
+    public Session(UUID id, long userId, short statusCode){
+        this.id = id;
         this.userId = userId;
         this.statusCode = statusCode;
     }
