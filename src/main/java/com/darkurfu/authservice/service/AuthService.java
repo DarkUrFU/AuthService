@@ -1,15 +1,16 @@
 package com.darkurfu.authservice.service;
 
-import com.darkurfu.authservice.datamodels.exceptions.BadPasswordOrLogin;
+import com.darkurfu.authservice.datamodels.exceptions.BadPasswordOrLoginException;
+import com.darkurfu.authservice.datamodels.exceptions.LoginUsedException;
 import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import com.darkurfu.authservice.datamodels.session.SessionLoginInfo;
 import com.darkurfu.authservice.datamodels.user.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
+import java.sql.SQLException;
 
 @Service
 public class AuthService {
@@ -30,7 +31,7 @@ public class AuthService {
     }
 
     //@Transactional
-    public PairRtJwt login(User user, SessionLoginInfo sessionLoginInfo) throws NoSuchAlgorithmException, InvalidKeySpecException, BadPasswordOrLogin {
+    public PairRtJwt login(User user, SessionLoginInfo sessionLoginInfo) throws NoSuchAlgorithmException, InvalidKeySpecException, BadPasswordOrLoginException {
         User usr = userService.login(user);
         return sessionService.createSession(usr, sessionLoginInfo);
     }

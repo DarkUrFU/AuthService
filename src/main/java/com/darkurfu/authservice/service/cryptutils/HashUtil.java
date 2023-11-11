@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 public class HashUtil {
 
     public String generateHash(String str, String salt) throws NoSuchAlgorithmException, InvalidKeySpecException {
-        Logger.getLogger("AAAAAAAAAAA").info(salt);
         return getHash(str, stringToByte(salt));
     }
 
