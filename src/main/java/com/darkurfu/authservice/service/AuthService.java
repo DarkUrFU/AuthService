@@ -24,12 +24,12 @@ public class AuthService {
         this.sessionService = sessionService;
     }
 
-    @Transactional
+    //@Transactional //не надо, т.к. по-умолчанию автокоммит включен, а тут только 1 запрос к бд
     public void registerUser(User user) throws NoSuchAlgorithmException, InvalidKeySpecException {
         userService.register(user);
     }
 
-    @Transactional
+    //@Transactional
     public PairRtJwt login(User user, SessionLoginInfo sessionLoginInfo) throws NoSuchAlgorithmException, InvalidKeySpecException, BadPasswordOrLogin {
         User usr = userService.login(user);
         return sessionService.createSession(usr, sessionLoginInfo);

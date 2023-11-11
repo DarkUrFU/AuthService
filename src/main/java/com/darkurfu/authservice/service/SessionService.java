@@ -28,29 +28,27 @@ import java.util.UUID;
 public class SessionService {
 
     private final JWTUtil jwtUtil;
-    private final HashUtil hashUtil;
     private final SessionRepository sessionRepository;
     private final SessionLoginInfoRepository sessionLoginInfoRepository;
 
     @Autowired
-    public SessionService(JWTUtil jwtUtil, HashUtil hashUtil,
+    public SessionService(JWTUtil jwtUtil,
                           SessionRepository sessionRepository,
                           SessionLoginInfoRepository sessionLoginInfoRepository){
         this.jwtUtil = jwtUtil;
-        this.hashUtil = hashUtil;
         this.sessionRepository = sessionRepository;
         this.sessionLoginInfoRepository = sessionLoginInfoRepository;
     }
 
-    public PairRtJwt createSession(User user, SessionLoginInfo sessionLoginInfo) throws NoSuchAlgorithmException, InvalidKeySpecException {
+    @Transactional // он не понмал что в транзакции оборачивать
+    public PairRtJwt createSession(User user, SessionLoginInfo sessionLoginInfo) {
         UUID uuid = UUID.randomUUID();
-        LocalDateTime date = LocalDateTime.now(ZoneId.of("Asia/Yekaterinburg"));
         PairRtJwt pairRtJwt = jwtUtil.generatePair(String.valueOf(user.getType()), user.getId(), uuid.toString());
 
-        sessionRepository.save(new Session(uuid.toString(), user.getId(), SessionStatus.ACTIVE.getCode()));
+        sessionRepository.save(new Session(uuid, user.getId(), SessionStatus.ACTIVE.getCode()));
 
         sessionLoginInfo.setId(uuid);
-        sessionLoginInfo.setLastActiveTime(Timestamp.from(date.atZone(ZoneId.of("Asia/Yekaterinburg")).toInstant()));
+        sessionLoginInfo.setLastActiveTime(new Timestamp(System.currentTimeMillis()));
 
         sessionLoginInfoRepository.save(sessionLoginInfo);
 
