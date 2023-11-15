@@ -2,6 +2,7 @@ package com.darkurfu.authservice.service.cryptutils;
 
 import com.darkurfu.authservice.consts.PrivateConst;
 import com.darkurfu.authservice.datamodels.session.PairRtJwt;
+import com.darkurfu.authservice.service.system.TimeUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import java.time.*;
 import java.util.Date;
+import java.util.HashMap;
 
 
 @Component()
@@ -51,10 +53,8 @@ public class JWTUtil {
                 .claim("userId", userId)
                 .claim("sessionId", sessionId)
 
-                .issuedAt(
-                        Date.from(date.atZone(ZoneId.of("Asia/Yekaterinburg")).toInstant())) //date of generate token
-                .expiration(
-                        Date.from(date.plusHours(2).atZone(ZoneId.of("Asia/Yekaterinburg")).toInstant())) // date of end token
+                .issuedAt(TimeUtil.getCurrentTime()) //date of generate token
+                .expiration(TimeUtil.getCurrentTimePlusHours(2)) // date of end token
 
 
                 .signWith(secretKey) //set secret key
@@ -77,10 +77,8 @@ public class JWTUtil {
                 .claim("userId", userId)
                 .claim("sessionId", sessionId)
 
-                .issuedAt(
-                        Date.from(date.atStartOfDay(ZoneId.of("Asia/Yekaterinburg")).toInstant())) //date of generate token
-                .expiration(
-                        Date.from(date.plusDays(7).atStartOfDay(ZoneId.of("Asia/Yekaterinburg")).toInstant())) // date of end token
+                .issuedAt(TimeUtil.getCurrentTime()) //date of generate token
+                .expiration(TimeUtil.getCurrentTimePlusDays(7)) // date of end token
 
 
                 .signWith(secretKey) //set secret key
@@ -88,6 +86,7 @@ public class JWTUtil {
 
         return jwt;
     }
+
 
     public Jws<Claims> encryptJWT(String jwt) throws SignatureException {
         Jws<Claims> a = null;
@@ -97,9 +96,37 @@ public class JWTUtil {
                 .build()
                 .parseSignedClaims(jwt);
 
-        //HashMap<String, String> v = (HashMap<String, String>) a.getPayload().get("user");
-
         return a;
+    }
+
+
+    public boolean isTokenValid(String jwt){
+
+        try {
+            Jwts.parser()
+                    .verifyWith(secretKey)
+                    .build()
+                    .parseSignedClaims(jwt);
+        } catch (SignatureException e){
+            return false;
+        }
+
+        return true;
+    }
+
+
+    private boolean isTokenExpired(String token) {
+        Date a = Jwts.parser()
+                .verifyWith(secretKey)
+                .build()
+                .parseSignedClaims(token)
+                .getPayload()
+                .getExpiration();
+
+
+
+
+        return false;
     }
 }
 

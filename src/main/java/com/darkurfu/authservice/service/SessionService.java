@@ -2,6 +2,7 @@ package com.darkurfu.authservice.service;
 
 import com.darkurfu.authservice.datamodels.enums.SessionStatus;
 import com.darkurfu.authservice.datamodels.enums.UserType;
+import com.darkurfu.authservice.datamodels.exceptions.NotFindTypeException;
 import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import com.darkurfu.authservice.datamodels.session.Session;
 import com.darkurfu.authservice.datamodels.session.SessionInfo;
@@ -11,6 +12,7 @@ import com.darkurfu.authservice.repository.session.SessionLoginInfoRepository;
 import com.darkurfu.authservice.repository.session.SessionRepository;
 import com.darkurfu.authservice.service.cryptutils.HashUtil;
 import com.darkurfu.authservice.service.cryptutils.JWTUtil;
+import com.darkurfu.authservice.service.system.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,10 +50,15 @@ public class SessionService {
         sessionRepository.save(new Session(uuid, user.getId(), SessionStatus.ACTIVE.getCode()));
 
         sessionLoginInfo.setId(uuid);
-        sessionLoginInfo.setLastActiveTime(new Timestamp(System.currentTimeMillis()));
+        sessionLoginInfo.setLastActiveTime(TimeUtil.getCurrentTime());
 
         sessionLoginInfoRepository.save(sessionLoginInfo);
 
         return pairRtJwt;
+    }
+
+    public SessionStatus getSessionStatus(String uuid) throws NotFindTypeException {
+
+        return SessionStatus.ACTIVE.getByCode(sessionRepository.getStatus(UUID.fromString(uuid)));
     }
 }
