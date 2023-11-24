@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public enum UserType {
-    USER((short) 0), MODERATOR((short) 1);
+    USER((short) 0), MODERATOR((short) 1), ADMIN((short) 2);
 
 
     private final short code;

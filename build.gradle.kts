@@ -31,8 +31,9 @@ dependencies {
     implementation("io.jsonwebtoken:jjwt-impl:0.12.3")
     implementation("io.jsonwebtoken:jjwt-jackson:0.12.3")
 
-    //implementation("io.jsonwebtoken:jjwt:0.9.1")
     //implementation("jakarta.xml.bind:jakarta.xml.bind-api:2.3.3")
+    implementation("org.springframework.security:spring-security-oauth2-resource-server:6.1.5")
+    implementation("org.springframework.security.oauth:spring-security-oauth2:2.5.2.RELEASE")
 
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-security")

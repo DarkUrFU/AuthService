@@ -11,21 +11,30 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
+import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
 @NoArgsConstructor(force = true)
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
 
     @Autowired
-    private JWTUtil jwtUtil;
+    private final JWTUtil jwtUtil;
     @Autowired
-    private SessionService sessionService;
+    private final SessionService sessionService;
+    @Autowired
+    private final UserDetailsService userDetailsService;
 
 
     @Override
@@ -44,7 +53,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 
         jwt = authHeader.substring(7);
-        if (jwt.isEmpty() || !jwtUtil.isTokenValid(jwt)){
+        if (jwt.isEmpty() || !jwtUtil.isTokenValid(jwt) || SecurityContextHolder.getContext().getAuthentication() != null){
             filterChain.doFilter(request,response);
             return;
         }
@@ -54,11 +63,17 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         try {
             SessionStatus sessionStatus = sessionService.getSessionStatus(sessionID);
 
+
             if (sessionStatus == SessionStatus.ACTIVE){
                 String userId = (String) payload.get("userId");
                 String role = (String) payload.get("role");
 
-                response.addHeader("UserID","");
+                UserDetails userDetails = userDetailsService.loadUserByUsername("");
+
+
+                //UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken();
+
+                //SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
 
 
@@ -71,3 +86,4 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
 }
+
