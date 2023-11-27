@@ -3,12 +3,15 @@ package com.darkurfu.authservice.datamodels.mod_api;
 import com.darkurfu.authservice.datamodels.enums.Services;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 public class ModeratorInfo {
     private Long id;
     private Long chatId;

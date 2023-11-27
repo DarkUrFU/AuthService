@@ -2,6 +2,7 @@ package com.darkurfu.authservice.service.cryptutils;
 
 import com.darkurfu.authservice.consts.PrivateConst;
 import com.darkurfu.authservice.datamodels.session.PairRtJwt;
+import com.darkurfu.authservice.datamodels.user.UserAuthInfo;
 import com.darkurfu.authservice.service.system.TimeUtil;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.io.Decoders;
@@ -30,14 +31,14 @@ public class JWTUtil {
         return Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public PairRtJwt generatePair(String role, long userId, String sessionId){
-        String rt = generateRefreshJWT(userId, sessionId);
-        String jwt = generateAccessJWT(role, userId, sessionId);
+    public PairRtJwt generatePair(UserAuthInfo userAuthInfo){
+        String rt = generateRefreshJWT(userAuthInfo.getUserId(), userAuthInfo.getSessionId());
+        String jwt = generateAccessJWT(userAuthInfo.getRole(), userAuthInfo.getUserId(), userAuthInfo.getSessionId(), userAuthInfo.getPermissions());
 
         return new PairRtJwt(rt,jwt);
     }
 
-    public  String generateAccessJWT(String role, long userId, String sessionId){
+    public  String generateAccessJWT(Integer role, Long userId, String sessionId, HashMap<Integer, Integer> permissions){
         String jwt;
 
         LocalDateTime date = LocalDateTime.now(ZoneId.of("Asia/Yekaterinburg"));
@@ -49,6 +50,7 @@ public class JWTUtil {
 
                 .and()
                 .claim("role", role) // moder, user or smth else
+                .claim("permissions", permissions)
 
                 .claim("userId", userId)
                 .claim("sessionId", sessionId)

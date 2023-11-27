@@ -1,6 +1,7 @@
 package com.darkurfu.authservice.service;
 
 import com.darkurfu.authservice.datamodels.exceptions.BadPasswordOrLoginException;
+import com.darkurfu.authservice.datamodels.exceptions.BadRoleException;
 import com.darkurfu.authservice.datamodels.exceptions.LoginUsedException;
 import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import com.darkurfu.authservice.datamodels.session.SessionLoginInfo;
@@ -31,7 +32,7 @@ public class AuthService {
     }
 
     //@Transactional
-    public PairRtJwt login(User user, SessionLoginInfo sessionLoginInfo) throws NoSuchAlgorithmException, InvalidKeySpecException, BadPasswordOrLoginException {
+    public PairRtJwt login(User user, SessionLoginInfo sessionLoginInfo) throws NoSuchAlgorithmException, InvalidKeySpecException, BadPasswordOrLoginException, BadRoleException {
         User usr = userService.login(user);
         return sessionService.createSession(usr, sessionLoginInfo);
     }

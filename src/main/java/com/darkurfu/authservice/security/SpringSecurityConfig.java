@@ -1,16 +1,24 @@
 package com.darkurfu.authservice.security;
 
+import com.darkurfu.authservice.datamodels.enums.Permissions;
+import com.darkurfu.authservice.datamodels.enums.Services;
+import com.darkurfu.authservice.service.authutils.GrantedAuthUtil;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
-import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.client.RestTemplate;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.time.Duration;
+
+import static org.springframework.security.config.http.SessionCreationPolicy.STATELESS;
+
+
 
 @Configuration
 @EnableWebSecurity
@@ -26,16 +34,35 @@ public class SpringSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(
                         (auth) -> auth
+                                .requestMatchers("/test/**").hasAnyAuthority(
+                                        GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.READ),
+                                        GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.COMMIT),
+                                        GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.ALL)
+                                )
+                                .requestMatchers("/api/web/v1/auth/edit/**").authenticated()
+                                .requestMatchers("/api/web/v1/auth/session/**").authenticated()
+
                                 .anyRequest().permitAll()
                 )
+                .sessionManagement(session -> session.sessionCreationPolicy(STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
 
-        return http.build();
+        return http.getOrBuild();
     }
+
+
 
     @Bean
     public  JwtAuthFilter jwtAuthenticationFilter() {
         return new JwtAuthFilter();
     }
+
+    @Bean
+    public RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+        return restTemplateBuilder
+                .setConnectTimeout(Duration.ofSeconds(10))
+                .build();
+    }
+
 }

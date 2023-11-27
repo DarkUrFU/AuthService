@@ -1,6 +1,7 @@
 package com.darkurfu.authservice.datamodels.enums;
 
 import com.darkurfu.authservice.datamodels.exceptions.NotFindTypeException;
+import lombok.Getter;
 
 import java.lang.reflect.Field;
 
@@ -15,9 +16,12 @@ public enum Services {
 
 
     public final String programName;
+    public final String serviceName;
     public final Short code;
-    Services(short code, String name, String programName){
+
+    Services(short code, String serviceName, String programName){
         this.code = code;
+        this.serviceName = serviceName;
         this.programName = programName;
     }
 

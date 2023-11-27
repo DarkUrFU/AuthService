@@ -1,4 +1,4 @@
-package com.darkurfu.authservice.crypto;
+package com.darkurfu.authservice.hash;
 
 
 import com.darkurfu.authservice.datamodels.user.User;
@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 

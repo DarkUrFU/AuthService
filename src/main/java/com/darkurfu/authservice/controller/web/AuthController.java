@@ -1,7 +1,6 @@
-package com.darkurfu.authservice.controller;
+package com.darkurfu.authservice.controller.web;
 
 import com.darkurfu.authservice.datamodels.exceptions.BadPasswordOrLoginException;
-import com.darkurfu.authservice.datamodels.exceptions.LoginUsedException;
 import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import com.darkurfu.authservice.datamodels.user.User;
 import com.darkurfu.authservice.datamodels.user.UserLogin;
@@ -10,10 +9,6 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.sql.SQLException;
 
 @RestController
 @RequestMapping("/auth")

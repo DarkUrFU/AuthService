@@ -8,6 +8,8 @@ import io.jsonwebtoken.security.SignatureException;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.util.HashMap;
+
 
 public class JWTUtilTest {
 
@@ -22,7 +24,7 @@ public class JWTUtilTest {
 
     @BeforeAll
     static void generateData(){
-        generatedJWT = jwtUtil.generateAccessJWT("admin",1l,"uuid");
+        generatedJWT = jwtUtil.generateAccessJWT(0,1L,"uuid", new HashMap<>());
 
         System.out.println(generatedJWT);
     }

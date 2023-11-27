@@ -1,28 +1,31 @@
 package com.darkurfu.authservice.security;
 
 import com.darkurfu.authservice.datamodels.enums.SessionStatus;
+import com.darkurfu.authservice.datamodels.exceptions.NotFindSessionException;
 import com.darkurfu.authservice.datamodels.exceptions.NotFindTypeException;
+import com.darkurfu.authservice.datamodels.user.UserAuthInfo;
 import com.darkurfu.authservice.service.SessionService;
+import com.darkurfu.authservice.service.authutils.GrantedAuthUtil;
 import com.darkurfu.authservice.service.cryptutils.JWTUtil;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.oauth2.server.resource.authentication.BearerTokenAuthenticationToken;
-import org.springframework.security.oauth2.server.resource.web.authentication.BearerTokenAuthenticationFilter;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Objects;
+import java.util.logging.Logger;
+
 
 @NoArgsConstructor(force = true)
 @RequiredArgsConstructor
@@ -53,7 +56,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 
 
         jwt = authHeader.substring(7);
-        if (jwt.isEmpty() || !jwtUtil.isTokenValid(jwt) || SecurityContextHolder.getContext().getAuthentication() != null){
+        if (jwt.isEmpty() || !Objects.requireNonNull(jwtUtil).isTokenValid(jwt) || SecurityContextHolder.getContext().getAuthentication() != null){
             filterChain.doFilter(request,response);
             return;
         }
@@ -61,27 +64,48 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         Claims payload = jwtUtil.encryptJWT(jwt).getPayload();
         String sessionID = (String) payload.get("sessionId");
         try {
+            assert sessionService != null;
             SessionStatus sessionStatus = sessionService.getSessionStatus(sessionID);
 
 
             if (sessionStatus == SessionStatus.ACTIVE){
-                String userId = (String) payload.get("userId");
-                String role = (String) payload.get("role");
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername("");
+                UserAuthInfo userAuthInfo = new UserAuthInfo(
+                        payload.get("sessionId", String.class),
+                        payload.get("userId", Long.class),
+                        payload.get("role", Integer.class)
+                );
 
 
-                //UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken();
+                if (userAuthInfo.getRole() != 0){
+                    userAuthInfo.setPermissionsOfMapStrInt(
+                            payload.get("permissions", HashMap.class)
+                    );
+                }
 
-                //SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+
+                UsernamePasswordAuthenticationToken authenticationToken
+                        = new UsernamePasswordAuthenticationToken(
+                                userAuthInfo,
+                        null,
+                        GrantedAuthUtil.getAuthorities(
+                                userAuthInfo.getPermissions()
+                        )
+                );
+
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
             }
 
 
         } catch (NotFindTypeException e) {
             filterChain.doFilter(request, response);
             return;
+        } catch (NotFindSessionException e){
+            filterChain.doFilter(request, response);
+            return;
         }
 
+        Logger.getLogger("AAAAAAAAAA").info(SecurityContextHolder.getContext().getAuthentication().toString());
 
         filterChain.doFilter(request, response);
     }
