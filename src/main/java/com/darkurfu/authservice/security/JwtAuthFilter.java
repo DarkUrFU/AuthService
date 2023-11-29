@@ -1,8 +1,8 @@
 package com.darkurfu.authservice.security;
 
 import com.darkurfu.authservice.datamodels.enums.SessionStatus;
-import com.darkurfu.authservice.datamodels.exceptions.NotFindSessionException;
-import com.darkurfu.authservice.datamodels.exceptions.NotFindTypeException;
+import com.darkurfu.authservice.exceptions.NotFindSessionException;
+import com.darkurfu.authservice.exceptions.NotFindTypeException;
 import com.darkurfu.authservice.datamodels.user.UserAuthInfo;
 import com.darkurfu.authservice.service.SessionService;
 import com.darkurfu.authservice.service.authutils.GrantedAuthUtil;

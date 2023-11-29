@@ -1,10 +1,9 @@
-package com.darkurfu.authservice.datamodels.mod_api;
+package com.darkurfu.authservice.datamodels.mod;
 
 import com.darkurfu.authservice.datamodels.enums.Services;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import java.lang.reflect.Field;
 import java.util.HashMap;

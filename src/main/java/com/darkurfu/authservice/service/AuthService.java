@@ -4,13 +4,13 @@ import com.darkurfu.authservice.datamodels.exceptions.*;
 import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import com.darkurfu.authservice.datamodels.session.SessionLoginInfo;
 import com.darkurfu.authservice.datamodels.user.User;
+import com.darkurfu.authservice.exceptions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.sql.SQLException;
 
 @Service
 public class AuthService {

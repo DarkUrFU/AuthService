@@ -1,13 +1,7 @@
 package com.darkurfu.authservice.datamodels.user;
 
-import com.darkurfu.authservice.datamodels.enums.Permissions;
-import com.darkurfu.authservice.datamodels.enums.Services;
-import com.darkurfu.authservice.datamodels.enums.UserType;
-import com.darkurfu.authservice.datamodels.exceptions.NotFindTypeException;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
 

@@ -1,7 +1,7 @@
 package com.darkurfu.authservice.controller.internal;
 
 import com.darkurfu.authservice.datamodels.enums.SessionStatus;
-import com.darkurfu.authservice.datamodels.exceptions.NotFindTypeException;
+import com.darkurfu.authservice.exceptions.NotFindTypeException;
 import com.darkurfu.authservice.service.SessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;

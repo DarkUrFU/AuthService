@@ -1,8 +1,7 @@
 package com.darkurfu.authservice.service;
 
-import com.darkurfu.authservice.datamodels.exceptions.BadPasswordOrLoginException;
-import com.darkurfu.authservice.datamodels.exceptions.LoginUsedException;
-import com.darkurfu.authservice.datamodels.exceptions.NotFindUserException;
+import com.darkurfu.authservice.exceptions.BadPasswordOrLoginException;
+import com.darkurfu.authservice.exceptions.NotFindUserException;
 import com.darkurfu.authservice.datamodels.user.UpdateUserPassword;
 import com.darkurfu.authservice.datamodels.user.User;
 import com.darkurfu.authservice.repository.user.UserRepository;
@@ -13,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
-import java.sql.SQLException;
 import java.util.Optional;
 import java.util.UUID;
 

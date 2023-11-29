@@ -5,7 +5,7 @@ import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import com.darkurfu.authservice.datamodels.user.User;
 import com.darkurfu.authservice.datamodels.user.UserAuthInfo;
 import com.darkurfu.authservice.datamodels.user.UserLogin;
-import com.darkurfu.authservice.security.SpringSecurityConfig;
+import com.darkurfu.authservice.exceptions.*;
 import com.darkurfu.authservice.service.AuthService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatusCode;

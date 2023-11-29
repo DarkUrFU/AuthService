@@ -1,7 +1,7 @@
 package com.darkurfu.authservice.controller.web;
 
-import com.darkurfu.authservice.datamodels.exceptions.NotFindSessionException;
-import com.darkurfu.authservice.datamodels.exceptions.SessionNotActiveException;
+import com.darkurfu.authservice.exceptions.NotFindSessionException;
+import com.darkurfu.authservice.exceptions.SessionNotActiveException;
 import com.darkurfu.authservice.datamodels.session.SessionInfo;
 import com.darkurfu.authservice.datamodels.user.UserAuthInfo;
 import com.darkurfu.authservice.service.SessionService;

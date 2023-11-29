@@ -27,7 +27,6 @@ public class SpringSecurityConfig {
 
     public SpringSecurityConfig(){    }
 
-///api/internal/v1/auth/ban
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -35,16 +34,16 @@ public class SpringSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(
                         (auth) -> auth
-                                .requestMatchers(HttpMethod.GET, "api/internal/v1/auth/ban/**").hasAnyAuthority(
+                                .requestMatchers(HttpMethod.GET, "api/web/v1/auth/ban/**").hasAnyAuthority(
                                         GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.READ),
                                         GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.COMMIT),
                                         GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.ALL)
                                 )
-                                .requestMatchers(HttpMethod.POST, "api/internal/v1/auth/ban/**").hasAnyAuthority(
+                                .requestMatchers(HttpMethod.POST, "api/web/v1/auth/ban/**").hasAnyAuthority(
                                         GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.COMMIT),
                                         GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.ALL)
                                 )
-                                .requestMatchers(HttpMethod.DELETE, "api/internal/v1/auth/ban/**").hasAnyAuthority(
+                                .requestMatchers(HttpMethod.DELETE, "api/web/v1/auth/ban/**").hasAnyAuthority(
                                         GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.COMMIT),
                                         GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.ALL)
                                 )

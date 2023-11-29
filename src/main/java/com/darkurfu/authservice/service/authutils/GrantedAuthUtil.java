@@ -2,7 +2,7 @@ package com.darkurfu.authservice.service.authutils;
 
 import com.darkurfu.authservice.datamodels.enums.Permissions;
 import com.darkurfu.authservice.datamodels.enums.Services;
-import com.darkurfu.authservice.datamodels.exceptions.NotFindTypeException;
+import com.darkurfu.authservice.exceptions.NotFindTypeException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;

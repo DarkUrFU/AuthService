@@ -1,7 +1,6 @@
 package com.darkurfu.authservice.datamodels.enums;
 
-import com.darkurfu.authservice.datamodels.exceptions.NotFindTypeException;
-import lombok.Getter;
+import com.darkurfu.authservice.exceptions.NotFindTypeException;
 
 import java.lang.reflect.Field;
 

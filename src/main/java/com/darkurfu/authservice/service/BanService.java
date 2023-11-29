@@ -1,9 +1,9 @@
 package com.darkurfu.authservice.service;
 
 import com.darkurfu.authservice.datamodels.Ban;
-import com.darkurfu.authservice.datamodels.exceptions.BanActiveException;
-import com.darkurfu.authservice.datamodels.exceptions.NotFindBanException;
-import com.darkurfu.authservice.datamodels.exceptions.NotFindUserException;
+import com.darkurfu.authservice.exceptions.BanActiveException;
+import com.darkurfu.authservice.exceptions.NotFindBanException;
+import com.darkurfu.authservice.exceptions.NotFindUserException;
 import com.darkurfu.authservice.repository.ban.BanRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,11 +17,13 @@ public class BanService {
 
     private final BanRepository banRepository;
     private final UserService userService;
+    private final SessionService sessionService;
 
     @Autowired
-    public BanService(BanRepository banRepository, UserService userService){
+    public BanService(BanRepository banRepository, UserService userService, SessionService sessionService){
         this.banRepository = banRepository;
         this.userService = userService;
+        this.sessionService = sessionService;
     }
 
 
@@ -31,6 +33,7 @@ public class BanService {
 
         if (b.isEmpty()){
             banRepository.save(ban);
+            sessionService.killAllSessions(ban.getUserId());
             return;
         }
 

@@ -1,4 +1,4 @@
-package com.darkurfu.authservice.datamodels.exceptions;
+package com.darkurfu.authservice.exceptions;
 
 
 public class NotFindTypeException extends Exception {

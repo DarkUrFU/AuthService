@@ -2,10 +2,10 @@ package com.darkurfu.authservice.service;
 
 import com.darkurfu.authservice.datamodels.enums.SessionStatus;
 import com.darkurfu.authservice.datamodels.enums.UserType;
-import com.darkurfu.authservice.datamodels.exceptions.BadRoleException;
-import com.darkurfu.authservice.datamodels.exceptions.NotFindSessionException;
-import com.darkurfu.authservice.datamodels.exceptions.NotFindTypeException;
-import com.darkurfu.authservice.datamodels.exceptions.SessionNotActiveException;
+import com.darkurfu.authservice.exceptions.BadRoleException;
+import com.darkurfu.authservice.exceptions.NotFindSessionException;
+import com.darkurfu.authservice.exceptions.NotFindTypeException;
+import com.darkurfu.authservice.exceptions.SessionNotActiveException;
 import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import com.darkurfu.authservice.datamodels.session.Session;
 import com.darkurfu.authservice.datamodels.session.SessionInfo;
@@ -143,7 +143,11 @@ public class SessionService {
         setSessionStatus(id, SessionStatus.LOGOUT);
     }
 
-    public void deadSession(String id) throws SessionNotActiveException, NotFindSessionException {
+    public void killSession(String id) throws SessionNotActiveException, NotFindSessionException {
         setSessionStatus(id, SessionStatus.DEAD);
+    }
+
+    public void killAllSessions(UUID userId) {
+        sessionRepository.setStatusForAllByUserId(userId);
     }
 }

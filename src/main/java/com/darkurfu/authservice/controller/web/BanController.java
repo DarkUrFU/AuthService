@@ -1,4 +1,4 @@
-package com.darkurfu.authservice.controller.internal;
+package com.darkurfu.authservice.controller.web;
 
 import com.darkurfu.authservice.datamodels.Ban;
 import com.darkurfu.authservice.exceptions.BanActiveException;
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/internal/v1/auth/ban")
-public class InternalBanController {
+@RequestMapping("/api/web/v1/auth/ban")
+public class BanController {
 
     private final BanService banService;
 
     @Autowired
-    public InternalBanController(BanService banService){
+    public BanController(BanService banService){
         this.banService = banService;
     }
 
