@@ -16,21 +16,12 @@ import com.darkurfu.authservice.repository.mod.ModRepository;
 import com.darkurfu.authservice.repository.session.SessionInfoRepository;
 import com.darkurfu.authservice.repository.session.SessionLoginInfoRepository;
 import com.darkurfu.authservice.repository.session.SessionRepository;
-import com.darkurfu.authservice.service.cryptutils.HashUtil;
 import com.darkurfu.authservice.service.cryptutils.JWTUtil;
 import com.darkurfu.authservice.service.system.TimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.RestTemplate;
 
-import java.security.NoSuchAlgorithmException;
-import java.security.spec.InvalidKeySpecException;
-import java.sql.Timestamp;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -59,7 +50,7 @@ public class SessionService {
     public PairRtJwt createSession(User user, SessionLoginInfo sessionLoginInfo) throws BadRoleException {
         UUID uuid = UUID.randomUUID();
         UserAuthInfo userAuthInfo = new UserAuthInfo(
-                uuid.toString(),
+                uuid,
                 user.getId(),
                 (int) user.getType()
         );
@@ -120,16 +111,23 @@ public class SessionService {
         throw new NotFindSessionException();
     }
 
-    public void closeSession(String id) throws NotFindSessionException, SessionNotActiveException {
-
+    /**
+     * Обновление статуса сессии
+     *
+     * @param id session id
+     * @param newStatus new session status
+     * @throws NotFindSessionException не нашёл сессию
+     * @throws SessionNotActiveException сессия не активна
+     */
+    private void setSessionStatus(String id, SessionStatus newStatus) throws NotFindSessionException, SessionNotActiveException {
 
         Optional<Short> status = sessionRepository.getStatus(UUID.fromString(id));
         if (status.isPresent()){
 
             if (status.get().equals(SessionStatus.ACTIVE.getCode())){
+                sessionRepository.setStatus(UUID.fromString(id), newStatus.getCode());
                 return;
             }
-
 
             throw new SessionNotActiveException();
         }
@@ -137,8 +135,15 @@ public class SessionService {
         throw new NotFindSessionException();
     }
 
-    public void logoutSession(String id) {
-        SessionStatus.LOGOUT.getCode();
+    public void closeSession(String id) throws NotFindSessionException, SessionNotActiveException {
+        setSessionStatus(id, SessionStatus.CLOSE);
+    }
 
+    public void logoutSession(String id) throws SessionNotActiveException, NotFindSessionException {
+        setSessionStatus(id, SessionStatus.LOGOUT);
+    }
+
+    public void deadSession(String id) throws SessionNotActiveException, NotFindSessionException {
+        setSessionStatus(id, SessionStatus.DEAD);
     }
 }

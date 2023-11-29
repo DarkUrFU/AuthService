@@ -16,7 +16,7 @@ public class Session {
     private UUID id;
 
     @Column(name = "user_id")
-    private Long userId;
+    private UUID userId;
 
     @Column(name = "status")
     private short statusCode;
@@ -24,15 +24,16 @@ public class Session {
 
     protected Session(){}
 
-    public Session(UUID id, long userId, short statusCode){
+    public Session(UUID id, UUID userId, short statusCode){
         this.id = id;
         this.userId = userId;
         this.statusCode = statusCode;
     }
 
-    public Session(String id, long userId, SessionStatus statusCode){
+    public Session(String id, UUID userId, SessionStatus statusCode){
         this.id = UUID.fromString(id);
         this.userId = userId;
         this.statusCode = statusCode.getCode();
     }
+
 }

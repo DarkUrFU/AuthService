@@ -9,27 +9,24 @@ import lombok.NoArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Data
 @NoArgsConstructor
 public class UserAuthInfo {
-    private String sessionId;
-    private Long userId;
+    private UUID sessionId;
+    private UUID userId;
     private Integer role;
     private HashMap<Integer, Integer> permissions;
 
-    public UserAuthInfo(String sessionId, Long userId, Integer role, HashMap<Integer, Integer> permissions){
+    public UserAuthInfo(UUID sessionId, UUID userId, Integer role, HashMap<Integer, Integer> permissions){
         this.sessionId = sessionId;
         this.userId = userId;
         this.role = role;
         this.permissions = permissions;
     }
 
-    public UserAuthInfo(String sessionId, Long userId, Integer role){
+    public UserAuthInfo(UUID sessionId, UUID userId, Integer role){
         this.sessionId = sessionId;
         this.userId = userId;
         this.role = role;

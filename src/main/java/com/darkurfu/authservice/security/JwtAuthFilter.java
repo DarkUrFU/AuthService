@@ -24,6 +24,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 
@@ -71,8 +72,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             if (sessionStatus == SessionStatus.ACTIVE){
 
                 UserAuthInfo userAuthInfo = new UserAuthInfo(
-                        payload.get("sessionId", String.class),
-                        payload.get("userId", Long.class),
+                        UUID.fromString(payload.get("sessionId", String.class)),
+                        UUID.fromString(payload.get("userId", String.class)),
                         payload.get("role", Integer.class)
                 );
 

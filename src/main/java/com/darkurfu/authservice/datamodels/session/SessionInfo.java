@@ -17,7 +17,7 @@ public class SessionInfo {
     private UUID id;
 
     @Column(name = "user_id")
-    private Long userId;
+    private UUID userId;
     private short status;
 
 

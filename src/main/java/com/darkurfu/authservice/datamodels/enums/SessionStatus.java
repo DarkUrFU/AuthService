@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 public enum SessionStatus {
-    ACTIVE((short) 0), CANCELLED((short) 1), LOGOUT((short) 2), DEAD((short) 3);
+    ACTIVE((short) 0), CLOSE((short) 1), LOGOUT((short) 2), DEAD((short) 3);
 
 
     private final short code;

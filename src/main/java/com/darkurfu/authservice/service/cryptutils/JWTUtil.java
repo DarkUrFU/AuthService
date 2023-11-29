@@ -14,6 +14,7 @@ import javax.crypto.SecretKey;
 import java.time.*;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.UUID;
 
 
 @Component()
@@ -38,7 +39,7 @@ public class JWTUtil {
         return new PairRtJwt(rt,jwt);
     }
 
-    public  String generateAccessJWT(Integer role, Long userId, String sessionId, HashMap<Integer, Integer> permissions){
+    public  String generateAccessJWT(Integer role, UUID userId, UUID sessionId, HashMap<Integer, Integer> permissions){
         String jwt;
 
         LocalDateTime date = LocalDateTime.now(ZoneId.of("Asia/Yekaterinburg"));
@@ -52,8 +53,8 @@ public class JWTUtil {
                 .claim("role", role) // moder, user or smth else
                 .claim("permissions", permissions)
 
-                .claim("userId", userId)
-                .claim("sessionId", sessionId)
+                .claim("userId", userId.toString())
+                .claim("sessionId", sessionId.toString())
 
                 .issuedAt(TimeUtil.getCurrentTime()) //date of generate token
                 .expiration(TimeUtil.getCurrentTimePlusHours(2)) // date of end token
@@ -65,7 +66,7 @@ public class JWTUtil {
         return jwt;
     }
 
-    public  String generateRefreshJWT(long userId, String sessionId){
+    public  String generateRefreshJWT(UUID userId, UUID sessionId){
         String jwt;
 
         LocalDate date = LocalDate.now(ZoneId.of("Asia/Yekaterinburg"));
@@ -76,8 +77,8 @@ public class JWTUtil {
                 .add("alg", secretKey.getAlgorithm())
 
                 .and()
-                .claim("userId", userId)
-                .claim("sessionId", sessionId)
+                .claim("userId", userId.toString())
+                .claim("sessionId", sessionId.toString())
 
                 .issuedAt(TimeUtil.getCurrentTime()) //date of generate token
                 .expiration(TimeUtil.getCurrentTimePlusDays(7)) // date of end token

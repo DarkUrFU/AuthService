@@ -1,17 +1,22 @@
 package com.darkurfu.authservice.controller.web;
 
 import com.darkurfu.authservice.datamodels.exceptions.BadPasswordOrLoginException;
+import com.darkurfu.authservice.datamodels.exceptions.NotFindSessionException;
+import com.darkurfu.authservice.datamodels.exceptions.SessionNotActiveException;
 import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import com.darkurfu.authservice.datamodels.user.User;
+import com.darkurfu.authservice.datamodels.user.UserAuthInfo;
 import com.darkurfu.authservice.datamodels.user.UserLogin;
+import com.darkurfu.authservice.security.SpringSecurityConfig;
 import com.darkurfu.authservice.service.AuthService;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/api/web/v1/auth/authentication")
 public class AuthController {
 
     private final AuthService authService;
@@ -36,9 +41,7 @@ public class AuthController {
             authService.registerUser(user);
 
             response = new ResponseEntity<>("success", HttpStatusCode.valueOf(200));
-        }   /* catch (PSQLException e){
-            response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
-        }*/ catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             response = new ResponseEntity<>("Bad login", HttpStatusCode.valueOf(400));
         } catch (Exception e){
             response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
@@ -69,6 +72,31 @@ public class AuthController {
             response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
         } catch (Exception e){
 
+            response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
+        }
+
+        return response;
+    }
+
+    /**
+     * Закрытие сессии
+     *
+     * @return
+     */
+    @PostMapping("/logout")
+    ResponseEntity<Object> logoutUser(
+    ){
+        ResponseEntity<Object> response;
+        UserAuthInfo userAuthInfo = (UserAuthInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+
+        try {
+            authService.logout(userAuthInfo.getSessionId().toString());
+            response = new ResponseEntity<>("success", HttpStatusCode.valueOf(200));
+        } catch (NotFindSessionException e) {
+            response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(404));
+        } catch (SessionNotActiveException e) {
+            response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(409));
+        } catch (Exception e){
             response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
         }
 

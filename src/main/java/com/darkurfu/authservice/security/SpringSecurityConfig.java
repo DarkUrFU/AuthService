@@ -41,6 +41,8 @@ public class SpringSecurityConfig {
                                 )
                                 .requestMatchers("/api/web/v1/auth/edit/**").authenticated()
                                 .requestMatchers("/api/web/v1/auth/session/**").authenticated()
+                                .requestMatchers("/api/web/v1/auth/authentication/logout").authenticated()
+
 
                                 .anyRequest().permitAll()
                 )

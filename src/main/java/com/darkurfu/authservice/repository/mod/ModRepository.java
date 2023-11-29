@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.UUID;
 import java.util.logging.Logger;
 
 @Repository
@@ -22,13 +23,13 @@ public class ModRepository {
         this.restTemplate = restTemplate;
     }
 
-    public ModeratorInfo getAccessFor(long id) throws Exception {
+    public ModeratorInfo getAccessFor(UUID id) throws Exception {
 
         ResponseEntity<ModeratorInfo>
                 response
                 =
                 restTemplate
-                        .getForEntity(Api.MOD_API_V1_GET_BY_ID(String.valueOf(id)), ModeratorInfo.class);
+                        .getForEntity(Api.MOD_API_V1_GET_BY_ID(id.toString()), ModeratorInfo.class);
 
 
         if (response.getStatusCode() == HttpStatusCode.valueOf(200) & response.hasBody()){

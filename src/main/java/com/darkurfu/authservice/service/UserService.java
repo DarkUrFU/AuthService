@@ -14,6 +14,7 @@ import java.security.NoSuchAlgorithmException;
 import java.security.spec.InvalidKeySpecException;
 import java.sql.SQLException;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -33,6 +34,7 @@ public class UserService {
         user.setSalt(salt);
 
         user.setPassword(hashUtil.generateHash(user.getPassword(), salt));
+        user.setId(UUID.randomUUID());
 
         userRepository.save(user);
     }

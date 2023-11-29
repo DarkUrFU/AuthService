@@ -5,13 +5,14 @@ import com.darkurfu.authservice.datamodels.enums.UserType;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.UUID;
+
 @Data
 @Entity(name = "users")
 @SecondaryTable(name = "salt", pkJoinColumns = @PrimaryKeyJoinColumn(name = "id"))
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long id;
+    private UUID id;
     private String login;
     private String password;
     private short type;
@@ -21,7 +22,7 @@ public class User {
 
     protected User(){}
 
-    public User(Long id, String login, String password, short type){
+    public User(UUID id, String login, String password, short type){
         this.id = id;
         this.login = login;
         this.password = password;

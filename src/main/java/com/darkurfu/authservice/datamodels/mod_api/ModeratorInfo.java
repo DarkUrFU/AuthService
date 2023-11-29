@@ -13,7 +13,7 @@ import java.util.HashMap;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ModeratorInfo {
-    private Long id;
+    private String id;
     private Long chatId;
     private String tgName;
 

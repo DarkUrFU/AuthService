@@ -12,13 +12,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/web/v1/auth/session")
-public class SessionController {
+@RequestMapping("/api/internal/v1/auth/session")
+public class InternalSessionController {
 
     private final SessionService sessionService;
 
     @Autowired
-    public SessionController(SessionService sessionService){
+    public InternalSessionController(SessionService sessionService){
         this.sessionService = sessionService;
     }
 
@@ -32,7 +32,7 @@ public class SessionController {
      * @return JWT
      */
     @GetMapping("/status/{id}")
-    ResponseEntity<String> getSession(
+    ResponseEntity<String> getSessionStatus(
             @PathVariable String id
     ) throws NotFindTypeException {
         ResponseEntity<String> response;
