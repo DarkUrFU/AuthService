@@ -103,8 +103,10 @@ public class SessionController {
         try {
             sessionService.closeSession(id);
             response = new ResponseEntity<>("success", HttpStatusCode.valueOf(200));
-        } catch (NotFindSessionException | SessionNotActiveException e) {
+        } catch (NotFindSessionException e) {
             response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(404));
+        } catch (SessionNotActiveException e) {
+            response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(409));
         } catch (Exception e){
             response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
         }

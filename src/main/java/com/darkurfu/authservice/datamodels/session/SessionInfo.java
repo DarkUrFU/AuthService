@@ -18,8 +18,7 @@ public class SessionInfo {
 
     @Column(name = "user_id")
     private Long userId;
-    private String rt;
-    private short statusCode;
+    private short status;
 
 
     @Column(table = "session_login_info")
