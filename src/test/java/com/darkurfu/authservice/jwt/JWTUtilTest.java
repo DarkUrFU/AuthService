@@ -25,7 +25,7 @@ public class JWTUtilTest {
 
     @BeforeAll
     static void generateData(){
-        generatedJWT = jwtUtil.generateAccessJWT(0, UUID.randomUUID(),"uuid", new HashMap<>());
+        generatedJWT = jwtUtil.generateAccessJWT(0, UUID.randomUUID(),UUID.randomUUID(), new HashMap<>());
 
         System.out.println(generatedJWT);
     }

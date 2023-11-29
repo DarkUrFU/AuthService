@@ -6,6 +6,7 @@ import com.darkurfu.authservice.service.authutils.GrantedAuthUtil;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -26,7 +27,7 @@ public class SpringSecurityConfig {
 
     public SpringSecurityConfig(){    }
 
-
+///api/internal/v1/auth/ban
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
@@ -34,8 +35,16 @@ public class SpringSecurityConfig {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeRequests(
                         (auth) -> auth
-                                .requestMatchers("/test/**").hasAnyAuthority(
+                                .requestMatchers(HttpMethod.GET, "api/internal/v1/auth/ban/**").hasAnyAuthority(
                                         GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.READ),
+                                        GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.COMMIT),
+                                        GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.ALL)
+                                )
+                                .requestMatchers(HttpMethod.POST, "api/internal/v1/auth/ban/**").hasAnyAuthority(
+                                        GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.COMMIT),
+                                        GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.ALL)
+                                )
+                                .requestMatchers(HttpMethod.DELETE, "api/internal/v1/auth/ban/**").hasAnyAuthority(
                                         GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.COMMIT),
                                         GrantedAuthUtil.getAuthPermissionStr(Services.AUTH_SERVICE, Permissions.ALL)
                                 )

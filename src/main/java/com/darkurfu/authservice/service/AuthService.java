@@ -17,12 +17,14 @@ public class AuthService {
 
     private final UserService userService;
     private final SessionService sessionService;
+    private final BanService banService;
 
 
     @Autowired
-    public AuthService(UserService userService, SessionService sessionService){
+    public AuthService(UserService userService, SessionService sessionService, BanService banService){
         this.userService = userService;
         this.sessionService = sessionService;
+        this.banService = banService;
     }
 
     //@Transactional //не надо, т.к. по-умолчанию автокоммит включен, а тут только 1 запрос к бд
@@ -31,9 +33,16 @@ public class AuthService {
     }
 
     @Transactional
-    public PairRtJwt login(User user, SessionLoginInfo sessionLoginInfo) throws NoSuchAlgorithmException, InvalidKeySpecException, BadPasswordOrLoginException, BadRoleException {
+    public PairRtJwt login(User user, SessionLoginInfo sessionLoginInfo) throws NoSuchAlgorithmException, InvalidKeySpecException, BadPasswordOrLoginException, BadRoleException, NotFindUserException, BanActiveException {
         User usr = userService.login(user);
-        return sessionService.createSession(usr, sessionLoginInfo);
+
+        try {
+            banService.getByUserId(user.getId());
+        } catch (NotFindBanException e) {
+            return sessionService.createSession(usr, sessionLoginInfo);
+        }
+
+        throw new BanActiveException();
     }
 
 

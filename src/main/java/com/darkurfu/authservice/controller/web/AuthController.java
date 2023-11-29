@@ -1,8 +1,6 @@
 package com.darkurfu.authservice.controller.web;
 
-import com.darkurfu.authservice.datamodels.exceptions.BadPasswordOrLoginException;
-import com.darkurfu.authservice.datamodels.exceptions.NotFindSessionException;
-import com.darkurfu.authservice.datamodels.exceptions.SessionNotActiveException;
+import com.darkurfu.authservice.datamodels.exceptions.*;
 import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import com.darkurfu.authservice.datamodels.user.User;
 import com.darkurfu.authservice.datamodels.user.UserAuthInfo;
@@ -68,10 +66,12 @@ public class AuthController {
 
             response = new ResponseEntity<>(pairRtJwt, HttpStatusCode.valueOf(200));
         }  catch (BadPasswordOrLoginException e){
-
             response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(400));
-        } catch (Exception e){
-
+        } catch (NotFindUserException e){
+            response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(409));
+        } catch (BanActiveException e){
+            response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(406));
+        }catch (Exception e){
             response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
         }
 

@@ -2,6 +2,7 @@ package com.darkurfu.authservice.service;
 
 import com.darkurfu.authservice.datamodels.exceptions.BadPasswordOrLoginException;
 import com.darkurfu.authservice.datamodels.exceptions.LoginUsedException;
+import com.darkurfu.authservice.datamodels.exceptions.NotFindUserException;
 import com.darkurfu.authservice.datamodels.user.UpdateUserPassword;
 import com.darkurfu.authservice.datamodels.user.User;
 import com.darkurfu.authservice.repository.user.UserRepository;
@@ -39,17 +40,23 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public User login(User user) throws NoSuchAlgorithmException, InvalidKeySpecException, BadPasswordOrLoginException {
-        User usr = userRepository.findByLogin(user.getLogin());
-        String passwd = hashUtil.generateHash(user.getPassword(), usr.getSalt());
+    @Transactional
+    public User login(User user) throws NoSuchAlgorithmException, InvalidKeySpecException, BadPasswordOrLoginException, NotFindUserException {
+        Optional<User> usr = userRepository.findByLogin(user.getLogin());
 
-        if (usr.getPassword().equals(passwd)){
-            return usr;
-        } else {
-            throw new BadPasswordOrLoginException();
+        if (usr.isPresent()){
+            String passwd = hashUtil.generateHash(user.getPassword(), usr.get().getSalt());
+
+            if (usr.get().getPassword().equals(passwd)){
+                return usr.get();
+            } else {
+                throw new BadPasswordOrLoginException();
+            }
         }
 
+        throw new NotFindUserException();
     }
+
 
     @Transactional
     public void updatePassword(UpdateUserPassword updateUserPassword) throws NoSuchAlgorithmException, InvalidKeySpecException {
@@ -64,5 +71,15 @@ public class UserService {
                 userRepository.save(user);
             }
         }
+    }
+
+    public UUID getIdByLogin(String login) throws NotFindUserException {
+        Optional<UUID> uuid = userRepository.findIdByLogin(login);
+
+        if (uuid.isPresent()){
+            return uuid.get();
+        }
+
+        throw new NotFindUserException();
     }
 }
