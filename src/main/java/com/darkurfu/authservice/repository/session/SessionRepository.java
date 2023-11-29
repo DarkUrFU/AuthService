@@ -19,14 +19,14 @@ public interface SessionRepository extends JpaRepository<Session, UUID> {
 
     @Modifying
     @Query("update session s set s.statusCode = :status where  s.id = :uuid")
-    void setStatus(@Param("uuid") UUID uuid, @Param("status")  Short status);
+    void setStatus(@Param("uuid") UUID uuid, @Param("status") Short status);
 
 
 
     @Query("select s from session s where s.userId = ?1")
     Optional<Short> getAllByUserId(UUID uuid);
 
-
-    @Query("update session s set s.statusCode = :status where s.userId = ?1")
-    Optional<Short> setStatusForAllByUserId(UUID uuid);
+    @Modifying
+    @Query("update session s set s.statusCode = :status where s.userId = :uuid")
+    void setStatusForAllByUserId(@Param("uuid") UUID uuid, @Param("status") Short status);
 }

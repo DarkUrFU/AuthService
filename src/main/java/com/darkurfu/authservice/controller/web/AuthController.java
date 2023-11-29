@@ -39,7 +39,7 @@ public class AuthController {
 
             response = new ResponseEntity<>("success", HttpStatusCode.valueOf(200));
         } catch (DataIntegrityViolationException e) {
-            response = new ResponseEntity<>("Bad login", HttpStatusCode.valueOf(400));
+            response = new ResponseEntity<>("bad login", HttpStatusCode.valueOf(400));
         } catch (Exception e){
             response = new ResponseEntity<>(e.getMessage(), HttpStatusCode.valueOf(500));
         }

@@ -36,7 +36,7 @@ public class AuthService {
         User usr = userService.login(user);
 
         try {
-            banService.getByUserId(user.getId());
+            banService.getByUserId(usr.getId());
         } catch (NotFindBanException e) {
             return sessionService.createSession(usr, sessionLoginInfo);
         }

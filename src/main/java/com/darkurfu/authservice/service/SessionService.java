@@ -71,7 +71,7 @@ public class SessionService {
 
         PairRtJwt pairRtJwt = jwtUtil.generatePair(userAuthInfo);
 
-        sessionRepository.save(new Session(uuid, user.getId(), SessionStatus.ACTIVE.getCode()));
+        sessionRepository.save(new Session(uuid, user.getId(), SessionStatus.ACTIVE.code));
 
         sessionLoginInfo.setId(uuid);
         sessionLoginInfo.setLastActiveTime(TimeUtil.getCurrentTime());
@@ -124,8 +124,8 @@ public class SessionService {
         Optional<Short> status = sessionRepository.getStatus(UUID.fromString(id));
         if (status.isPresent()){
 
-            if (status.get().equals(SessionStatus.ACTIVE.getCode())){
-                sessionRepository.setStatus(UUID.fromString(id), newStatus.getCode());
+            if (status.get().equals(SessionStatus.ACTIVE.code)){
+                sessionRepository.setStatus(UUID.fromString(id), newStatus.code);
                 return;
             }
 
@@ -148,6 +148,6 @@ public class SessionService {
     }
 
     public void killAllSessions(UUID userId) {
-        sessionRepository.setStatusForAllByUserId(userId);
+        sessionRepository.setStatusForAllByUserId(userId, SessionStatus.DEAD.code);
     }
 }

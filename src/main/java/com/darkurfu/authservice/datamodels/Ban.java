@@ -14,9 +14,8 @@ import java.sql.Timestamp;
 import java.util.UUID;
 
 @Data
-@Entity
+@Entity(name = "bans")
 @AllArgsConstructor
-@NoArgsConstructor
 public class Ban {
     @Id
     private UUID id;
@@ -27,6 +26,11 @@ public class Ban {
     private String description;
 
     private Timestamp date;
+
+    public Ban(){
+        this.id = UUID.randomUUID();
+        this.date = TimeUtil.getCurrentTime();
+    }
 
     public Ban(UUID userId, String description){
         this.id = UUID.randomUUID();

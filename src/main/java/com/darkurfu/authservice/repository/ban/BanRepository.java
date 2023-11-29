@@ -12,14 +12,14 @@ import java.util.UUID;
 @Repository
 public interface BanRepository extends JpaRepository<Ban, UUID> {
 
-    @Query("select b from Ban b where b.userId = ?1")
+    @Query("select b from bans b where b.userId = ?1")
     Optional<Ban> findBanByUserId(UUID id);
 
     @Modifying
-    @Query("delete from Ban b where b.userId = ?1")
+    @Query("delete from bans b where b.userId = ?1")
     void deleteBanByUserId(UUID id);
 
     @Modifying
-    @Query("delete from Ban b where b.id = ?1")
+    @Query("delete from bans b where b.id = ?1")
     void deleteBanById(UUID id);
 }

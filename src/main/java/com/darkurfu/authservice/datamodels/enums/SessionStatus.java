@@ -8,7 +8,7 @@ public enum SessionStatus {
     ACTIVE((short) 0), CLOSE((short) 1), LOGOUT((short) 2), DEAD((short) 3);
 
 
-    private final short code;
+    public final short code;
 
     SessionStatus(short code){
         this.code = code;
