@@ -1,6 +1,5 @@
 package com.darkurfu.authservice.controller.web;
 
-import com.darkurfu.authservice.datamodels.exceptions.*;
 import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import com.darkurfu.authservice.datamodels.user.User;
 import com.darkurfu.authservice.datamodels.user.UserAuthInfo;
