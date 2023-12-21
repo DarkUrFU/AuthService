@@ -12,5 +12,5 @@ import java.util.UUID;
 public interface SessionInfoRepository extends JpaRepository<SessionInfo, UUID> {
 
     @Query("select si from SessionInfo si where si.userId = ?1")
-    List<SessionInfo> findSessionInfoByUserId(Long id);
+    List<SessionInfo> findSessionInfoByUserId(UUID id);
 }
