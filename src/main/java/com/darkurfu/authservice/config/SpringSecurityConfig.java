@@ -1,4 +1,4 @@
-package com.darkurfu.authservice.security;
+package com.darkurfu.authservice.config;
 
 import com.darkurfu.authservice.datamodels.enums.Permissions;
 import com.darkurfu.authservice.datamodels.enums.Services;
@@ -7,7 +7,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;

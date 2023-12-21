@@ -1,10 +1,16 @@
 package com.darkurfu.authservice.controller.web;
 
 import com.darkurfu.authservice.datamodels.Ban;
+import com.darkurfu.authservice.datamodels.session.PairRtJwt;
 import com.darkurfu.authservice.exceptions.BanActiveException;
 import com.darkurfu.authservice.exceptions.NotFindBanException;
 import com.darkurfu.authservice.exceptions.NotFindUserException;
 import com.darkurfu.authservice.service.BanService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
 
+@Tag(name="Блокировка пользователей", description="")
 @RestController
 @RequestMapping("/api/web/v1/auth/ban")
 public class BanController {
@@ -23,11 +30,15 @@ public class BanController {
         this.banService = banService;
     }
 
-    /**
-     * Создание блокировки
-     *
-     * @return JWT
-     */
+    @Operation(
+            summary = "Блокировка пользователя",
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success"),
+                    @ApiResponse(responseCode = "409", description = "User has ban"),
+                    @ApiResponse(responseCode = "500", description = "server error")
+            }
+    )
     @PostMapping("/")
     ResponseEntity<String> createBan(
             @RequestBody Ban ban
@@ -47,11 +58,15 @@ public class BanController {
     }
 
 
-    /**
-     * Удаление блокировки
-     *
-     * @return JWT
-     */
+    @Operation(
+            summary = "Снятие блокировки с пользователя",
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success"),
+                    @ApiResponse(responseCode = "404", description = "not find ban"),
+                    @ApiResponse(responseCode = "500", description = "server error")
+            }
+    )
     @DeleteMapping("/{id}")
     ResponseEntity<String> deleteBan(
             @PathVariable String id
@@ -70,11 +85,15 @@ public class BanController {
         return response;
     }
 
-    /**
-     * Удаление блокировки
-     *
-     * @return JWT
-     */
+    @Operation(
+            summary = "Снятие блокировки с пользователя по логину пользователя",
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success"),
+                    @ApiResponse(responseCode = "404", description = "not find user"),
+                    @ApiResponse(responseCode = "500", description = "server error")
+            }
+    )
     @DeleteMapping("/user/login/{login}")
     ResponseEntity<String> deleteBanByUserLogin(
             @PathVariable String login
@@ -85,7 +104,7 @@ public class BanController {
             banService.deleteByUserLogin(login);
             response = new ResponseEntity<>("success", HttpStatusCode.valueOf(200));
         } catch (NotFindUserException | NotFindBanException e) {
-            response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(409));
+            response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(404));
         } catch (Exception e) {
             response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(500));
         }
@@ -93,11 +112,15 @@ public class BanController {
         return response;
     }
 
-    /**
-     * Удаление блокировки
-     *
-     * @return JWT
-     */
+    @Operation(
+            summary = "Снятие блокировки с пользователя по id пользователя",
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success"),
+                    @ApiResponse(responseCode = "404", description = "not find user"),
+                    @ApiResponse(responseCode = "500", description = "server error")
+            }
+    )
     @DeleteMapping("/user/id/{id}")
     ResponseEntity<String> deleteBanByUserId(
             @PathVariable String id
@@ -108,7 +131,7 @@ public class BanController {
             banService.deleteByUserId(UUID.fromString(id));
             response = new ResponseEntity<>("success", HttpStatusCode.valueOf(200));
         } catch (NotFindUserException | NotFindBanException e) {
-            response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(409));
+            response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(404));
         } catch (Exception e) {
             response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(500));
         }
@@ -116,11 +139,18 @@ public class BanController {
         return response;
     }
 
-    /**
-     * Полученик информации
-     *
-     * @return JWT
-     */
+    @Operation(
+            summary = "Получении информации о блокировке пользователя по id",
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success", content = {
+                            @Content(mediaType = "application/json", schema =
+                            @Schema(implementation = Ban.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "not find ban"),
+                    @ApiResponse(responseCode = "500", description = "server error")
+            }
+    )
     @GetMapping("/{id}")
     ResponseEntity<Object> getBan(
             @PathVariable String id
@@ -131,7 +161,7 @@ public class BanController {
             Ban ban = banService.get(UUID.fromString(id));
             response = new ResponseEntity<>(ban, HttpStatusCode.valueOf(200));
         } catch (NotFindBanException e) {
-            response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(409));
+            response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(404));
         } catch (Exception e) {
             response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(500));
         }
@@ -139,11 +169,18 @@ public class BanController {
         return response;
     }
 
-    /**
-     * снятие блокировки с сервера
-     *
-     * @return JWT
-     */
+    @Operation(
+            summary = "Получении информации о блокировке пользователя по логину пользователя",
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success", content = {
+                            @Content(mediaType = "application/json", schema =
+                            @Schema(implementation = Ban.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not find user"),
+                    @ApiResponse(responseCode = "500", description = "server error")
+            }
+    )
     @GetMapping("/user/login/{login}")
     ResponseEntity<Object> getBanByUserLogin(
             @PathVariable String login
@@ -154,7 +191,7 @@ public class BanController {
             Ban ban = banService.getByUserLogin(login);
             response = new ResponseEntity<>(ban, HttpStatusCode.valueOf(200));
         } catch (NotFindUserException | NotFindBanException e) {
-            response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(409));
+            response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(404));
         } catch (Exception e) {
             response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(500));
         }
@@ -163,11 +200,18 @@ public class BanController {
         return response;
     }
 
-    /**
-     * снятие блокировки с сервера
-     *
-     * @return JWT
-     */
+    @Operation(
+            summary = "Получении информации о блокировке пользователя по id пользователя",
+            description = "",
+            responses = {
+                    @ApiResponse(responseCode = "200", description = "success", content = {
+                            @Content(mediaType = "application/json", schema =
+                            @Schema(implementation = Ban.class))
+                    }),
+                    @ApiResponse(responseCode = "404", description = "Not find ban"),
+                    @ApiResponse(responseCode = "500", description = "server error")
+            }
+    )
     @GetMapping("/user/id/{id}")
     ResponseEntity<Object> getBanByUserId(
             @PathVariable String id
@@ -178,7 +222,7 @@ public class BanController {
             Ban ban = banService.getByUserId(UUID.fromString(id));
             response = new ResponseEntity<>(ban, HttpStatusCode.valueOf(200));
         } catch (NotFindBanException e) {
-            response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(409));
+            response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(404));
         } catch (Exception e) {
             response = new ResponseEntity<>(String.valueOf(e.getMessage()), HttpStatusCode.valueOf(500));
         }
