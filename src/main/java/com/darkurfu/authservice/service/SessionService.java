@@ -101,7 +101,7 @@ public class SessionService {
         throw new NotFindSessionException();
     }
 
-    public List<SessionInfo> getUserSessions(Long id) throws NotFindSessionException {
+    public List<SessionInfo> getUserSessions(UUID id) throws NotFindSessionException {
         List<SessionInfo> sessionsInfo = sessionInfoRepository.findSessionInfoByUserId(id);
 
         if (!sessionsInfo.isEmpty()){
